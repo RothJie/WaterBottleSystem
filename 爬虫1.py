@@ -28,13 +28,15 @@ def getFull(code, date):
         "User-Agent": random.choice(u_a_li)
     }
     resp = requests.get(url=url_, data=data, headers=headers)
-    get_data = json.loads(str(resp.text).strip().strip("jQuery35107738871601504242_1685238871524(").strip(");"))["data"]
+    print(resp.text)
+    get_data = json.loads(str(resp.text).strip().strip("jQuery35107738871601504242_1685374199524(").strip(");"))["data"]
 
     with open("info1.json", mode="r", encoding="utf-8") as f:
         info = json.load(f)
 
     buy = 0
     sell = 0
+    # print(get_data)
     for uni in get_data["data"]:
         if str(uni['t']) in info[3]:
             buy += uni['v']
@@ -46,6 +48,6 @@ def getFull(code, date):
 
 if __name__ == '__main__':
     # code = str(input("请输入股票代码:"))
-    code = "600332"
-    date = 20230526
+    code = "000066"
+    date = 20230529
     getFull(code, date)
