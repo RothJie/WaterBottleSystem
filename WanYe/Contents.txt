@@ -1,0 +1,7 @@
+mood
+keep
+kind
+coll
+milk
+move
+command
