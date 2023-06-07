@@ -18,7 +18,7 @@ class RocketFrame:
         links = {}
 
         def click(event):
-            r = int(t1.index(INSERT).split(".")[0])+1  # 获取光标所在的行列信息
+            r = int(t1.index(INSERT).split(".")[0]) + 1  # 获取光标所在的行列信息
             if r not in links:
                 r = 2
             webbrowser.open(links[r])
@@ -27,7 +27,10 @@ class RocketFrame:
         l1 = Label(frame, text="火箭发射界面", foreground="purple", font=("黑体", 15, "bold"))
         l1.pack()
         t1 = Text(frame, width=65, height=25, font=("黑体", 15, "bold"))
-        contents = hangQingUrl("火箭发射")
+        contents = hangQingUrl("火箭发射")[0]
+        params = hangQingUrl("火箭发射")[1]
+        sql = 'insert into rocket values(%s,%s,%s);'
+        dataToMysql(params=params, sql=sql)
         # print(contents)
 
         str_info = f"股票代码\t基本信息\n"
@@ -62,7 +65,7 @@ class BigBuyFrame:
         links = {}
 
         def click(event):
-            r = int(t1.index(INSERT).split(".")[0])+1  # 获取光标所在的行列信息
+            r = int(t1.index(INSERT).split(".")[0]) + 1  # 获取光标所在的行列信息
             if r not in links:
                 r = 2
             webbrowser.open(links[r])
@@ -71,7 +74,10 @@ class BigBuyFrame:
         l1 = Label(frame, text="大笔买入界面", foreground="purple", font=("黑体", 15, "bold"))
         l1.pack()
         t1 = Text(frame, width=65, height=25, font=("黑体", 15, "bold"))
-        contents = hangQingUrl("大笔买入")
+        contents = hangQingUrl("大笔买入")[0]
+        params = hangQingUrl("大笔买入")[1]
+        sql = 'insert into bigbuy values(%s,%s,%s);'
+        dataToMysql(params=params, sql=sql)
         # print(contents)
 
         str_info = f"股票代码\t基本信息\n"
@@ -106,7 +112,7 @@ class CompeteUpFrame:
         links = {}
 
         def click(event):
-            r = int(t1.index(INSERT).split(".")[0])+1  # 获取光标所在的行列信息
+            r = int(t1.index(INSERT).split(".")[0]) + 1  # 获取光标所在的行列信息
             if r not in links:
                 r = 2
             webbrowser.open(links[r])
@@ -115,8 +121,10 @@ class CompeteUpFrame:
         l1 = Label(frame, text="竞价上涨界面", foreground="purple", font=("黑体", 15, "bold"))
         l1.pack()
         t1 = Text(frame, width=65, height=25, font=("黑体", 15, "bold"))
-        contents = hangQingUrl("竞价上涨")
-        # print(contents)
+        contents = hangQingUrl("竞价上涨")[0]
+        params = hangQingUrl("竞价上涨")[1]
+        sql = 'insert into morning_compete_up values(%s,%s,%s);'
+        dataToMysql(params=params, sql=sql)
 
         str_info = f"股票代码\t基本信息\n"
         t1.insert(f"1.0", str_info)
@@ -167,7 +175,6 @@ class Face:
                 self.currentFrame = self.big_buy_frame.get()
                 self.currentFrame.pack()
 
-
         def competeUp():
             if self.currentFrame != self.competeUp_frame.get():
                 self.currentFrame.pack_forget()
@@ -179,8 +186,6 @@ class Face:
         menu.add_command(label='大笔买入', command=bigBuy)
         menu.add_command(label='竞价上涨', command=competeUp)
         self.root.config(menu=menu)
-
-
 
 
 if __name__ == '__main__':

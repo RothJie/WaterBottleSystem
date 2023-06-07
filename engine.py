@@ -1,4 +1,5 @@
 import random
+import pymysql
 import requests
 import time
 import json
@@ -59,6 +60,7 @@ def judgeChangeType(types_code: str):
 def hangQingUrl(type_: str = "火箭发射"):
     data_10 = engine(type_)
     contents = dict()
+    params = []
     for uni in data_10:
         ind = data_10.index(uni) + 1
         time_ = str(uni['tm'])
@@ -80,11 +82,23 @@ def hangQingUrl(type_: str = "火箭发射"):
             url_str = f'https://so.eastmoney.com/web/s?keyword={code}'
             base_info = f'第{ind}个 时间：{ttm} 名称：{name} 异动类型：{type_}'
             contents[f"{code}"] = [url_str, base_info]
+        params.append((code, name, ttm))
+    return contents, params
 
-    return contents
+
+def dataToMysql(params: list, sql: str):
+    conn = pymysql.connect(host='localhost', port=3306, user='root', password='abc123')
+    cursor = conn.cursor()
+    cursor.execute('use morning_fifteen_minutes;')
+    for param in params:
+        param = param
+        cursor.execute(sql, param)
+        conn.commit()
+    cursor.close()
+    conn.close()
 
 
 if __name__ == '__main__':
-    cont = hangQingUrl("火箭发射")
-    for uni in cont:
-        print(uni, cont[uni])
+    cont = hangQingUrl("火箭发射")[0]
+    cont1 = hangQingUrl("火箭发射")[1]
+    dataToMysql(sql='insert into rocket values(%s,%s,%s);', params=cont1)
